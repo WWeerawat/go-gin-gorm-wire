@@ -26,10 +26,12 @@ func init() {
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 func main() {
+	
 	port := os.Getenv("PORT")
 
 	init := config.Init()
 	app := router.Init(init)
 
 	app.Run(":" + port)
+
 }
