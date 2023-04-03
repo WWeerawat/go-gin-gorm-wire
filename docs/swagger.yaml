@@ -1,0 +1,97 @@
+definitions:
+  dao.Role:
+    properties:
+      id:
+        type: integer
+      role:
+        type: string
+    type: object
+  dao.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      role:
+        $ref: '#/definitions/dao.Role'
+      role_id:
+        type: integer
+      status:
+        type: integer
+    type: object
+  dto.CreateUserDto:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      role_id:
+        example: 1
+        type: integer
+    type: object
+info:
+  contact:
+    email: support@somewhere.com
+    name: API Support
+    url: http://somewhere.com/support
+  description: This is description
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://somewhere.com/
+  title: Customers API
+  version: "1.0"
+paths:
+  /api/user:
+    get:
+      consumes:
+      - application/json
+      description: Get all user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dao.User'
+      summary: Get All User
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: Create new user
+      parameters:
+      - description: User data to be created
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dao.User'
+      summary: Create User
+      tags:
+      - user
+  /health:
+    get:
+      description: Health checking for the service
+      operationId: HealthCheckHandler
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Health Check
+swagger: "2.0"
