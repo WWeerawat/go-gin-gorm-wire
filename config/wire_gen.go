@@ -9,6 +9,7 @@ package config
 import (
 	"github.com/google/wire"
 	"go-gin-gorm-wire/app/controller"
+	"go-gin-gorm-wire/app/module"
 	"go-gin-gorm-wire/app/repository"
 	"go-gin-gorm-wire/app/service"
 )
@@ -20,31 +21,29 @@ func Init() *Initialization {
 	userRepositoryImpl := repository.UserRepositoryInit(gormDB)
 	userServiceImpl := service.UserServiceInit(userRepositoryImpl)
 	userControllerImpl := controller.UserControllerInit(userServiceImpl)
+	userModule := module.UserModule{
+		Ctrl: userControllerImpl,
+		Svc:  userServiceImpl,
+		Repo: userRepositoryImpl,
+	}
 	roleRepositoryImpl := repository.RoleRepositoryInit(gormDB)
 	roleServiceImpl := service.RoleServiceInit(roleRepositoryImpl)
 	roleControllerImpl := controller.RoleControllerInit(roleServiceImpl)
+	roleModule := module.RoleModule{
+		Ctrl: roleControllerImpl,
+		Svc:  roleServiceImpl,
+		Repo: roleRepositoryImpl,
+	}
 	authServiceImpl := service.AuthServiceInit(userRepositoryImpl)
 	authControllerImpl := controller.AuthControllerInit(authServiceImpl)
-	initialization := NewInitialization(userRepositoryImpl, userServiceImpl, userControllerImpl, roleRepositoryImpl, roleServiceImpl, roleControllerImpl, authServiceImpl, authControllerImpl)
+	authModule := module.AuthModule{
+		Ctrl: authControllerImpl,
+		Svc:  authServiceImpl,
+	}
+	initialization := NewInitialization(userModule, roleModule, authModule)
 	return initialization
 }
 
 // injector.go:
 
 var db = wire.NewSet(ConnectToDB)
-
-var userServiceSet = wire.NewSet(service.UserServiceInit, wire.Bind(new(service.UserService), new(*service.UserServiceImpl)))
-
-var userRepoSet = wire.NewSet(repository.UserRepositoryInit, wire.Bind(new(repository.UserRepository), new(*repository.UserRepositoryImpl)))
-
-var userCtrlSet = wire.NewSet(controller.UserControllerInit, wire.Bind(new(controller.UserController), new(*controller.UserControllerImpl)))
-
-var roleServiceSet = wire.NewSet(service.RoleServiceInit, wire.Bind(new(service.RoleService), new(*service.RoleServiceImpl)))
-
-var roleRepoSet = wire.NewSet(repository.RoleRepositoryInit, wire.Bind(new(repository.RoleRepository), new(*repository.RoleRepositoryImpl)))
-
-var roleCtrlSet = wire.NewSet(controller.RoleControllerInit, wire.Bind(new(controller.RoleController), new(*controller.RoleControllerImpl)))
-
-var authServiceSet = wire.NewSet(service.AuthServiceInit, wire.Bind(new(service.AuthService), new(*service.AuthServiceImpl)))
-
-var authCtrlSet = wire.NewSet(controller.AuthControllerInit, wire.Bind(new(controller.AuthController), new(*controller.AuthControllerImpl)))

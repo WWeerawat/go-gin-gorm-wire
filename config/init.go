@@ -1,40 +1,24 @@
 package config
 
 import (
-	"go-gin-gorm-wire/app/controller"
-	"go-gin-gorm-wire/app/repository"
-	"go-gin-gorm-wire/app/service"
+	"go-gin-gorm-wire/app/module"
 )
 
 type Initialization struct {
-	userRepo repository.UserRepository
-	userSvc  service.UserService
-	UserCtrl controller.UserController
-	roleRepo repository.RoleRepository
-	roleSvc  service.RoleService
-	RoleCtrl controller.RoleController
-	authSvc  service.AuthService
-	AuthCtrl controller.AuthController
+	UserModule module.UserModule
+	RoleModule module.RoleModule
+	AuthModule module.AuthModule
 }
 
 func NewInitialization(
-	userRepo repository.UserRepository,
-	userService service.UserService,
-	userCtrl controller.UserController,
-	roleRepo repository.RoleRepository,
-	roleService service.RoleService,
-	roleCtrl controller.RoleController,
-	authService service.AuthService,
-	authCtrl controller.AuthController,
+	userModule module.UserModule,
+	roleModule module.RoleModule,
+	authModule module.AuthModule,
+
 ) *Initialization {
 	return &Initialization{
-		userRepo: userRepo,
-		userSvc:  userService,
-		UserCtrl: userCtrl,
-		roleRepo: roleRepo,
-		roleSvc:  roleService,
-		RoleCtrl: roleCtrl,
-		authSvc:  authService,
-		AuthCtrl: authCtrl,
+		UserModule: userModule,
+		RoleModule: roleModule,
+		AuthModule: authModule,
 	}
 }

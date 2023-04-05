@@ -5,57 +5,18 @@ package config
 
 import (
 	"github.com/google/wire"
-	"go-gin-gorm-wire/app/controller"
-	"go-gin-gorm-wire/app/repository"
-	"go-gin-gorm-wire/app/service"
+	"go-gin-gorm-wire/app/module"
 )
 
 var db = wire.NewSet(ConnectToDB)
-
-var userServiceSet = wire.NewSet(service.UserServiceInit,
-	wire.Bind(new(service.UserService), new(*service.UserServiceImpl)),
-)
-
-var userRepoSet = wire.NewSet(repository.UserRepositoryInit,
-	wire.Bind(new(repository.UserRepository), new(*repository.UserRepositoryImpl)),
-)
-
-var userCtrlSet = wire.NewSet(controller.UserControllerInit,
-	wire.Bind(new(controller.UserController), new(*controller.UserControllerImpl)),
-)
-
-var roleServiceSet = wire.NewSet(service.RoleServiceInit,
-	wire.Bind(new(service.RoleService), new(*service.RoleServiceImpl)),
-)
-
-var roleRepoSet = wire.NewSet(repository.RoleRepositoryInit,
-	wire.Bind(new(repository.RoleRepository), new(*repository.RoleRepositoryImpl)),
-)
-
-var roleCtrlSet = wire.NewSet(controller.RoleControllerInit,
-	wire.Bind(new(controller.RoleController), new(*controller.RoleControllerImpl)),
-)
-
-var authServiceSet = wire.NewSet(service.AuthServiceInit,
-	wire.Bind(new(service.AuthService), new(*service.AuthServiceImpl)),
-)
-
-var authCtrlSet = wire.NewSet(controller.AuthControllerInit,
-	wire.Bind(new(controller.AuthController), new(*controller.AuthControllerImpl)),
-)
 
 func Init() *Initialization {
 	wire.Build(
 		NewInitialization,
 		db,
-		userCtrlSet,
-		userServiceSet,
-		userRepoSet,
-		roleCtrlSet,
-		roleServiceSet,
-		roleRepoSet,
-		authCtrlSet,
-		authServiceSet,
+		module.UserModuleSet,
+		module.RoleModuleSet,
+		module.AuthModuleSet,
 	)
 	return nil
 }

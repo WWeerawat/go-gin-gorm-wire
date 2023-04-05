@@ -21,21 +21,21 @@ func Init(init *config.Initialization) *gin.Engine {
 	api := router.Group("/api")
 	{
 		user := api.Group("/user", service.AuthMiddleware)
-		user.GET("", init.UserCtrl.GetAllUserData)
-		user.GET("/:userID", init.UserCtrl.GetUserById)
-		user.PUT("/:userID", init.UserCtrl.UpdateUserData)
-		user.DELETE("/:userID", init.UserCtrl.DeleteUser)
+		user.GET("", init.UserModule.Ctrl.GetAllUserData)
+		user.GET("/:userID", init.UserModule.Ctrl.GetUserById)
+		user.PUT("/:userID", init.UserModule.Ctrl.UpdateUserData)
+		user.DELETE("/:userID", init.UserModule.Ctrl.DeleteUser)
 
 		role := api.Group("/role", service.AuthMiddleware)
-		role.GET("", init.RoleCtrl.GetAllRole)
-		role.POST("", init.RoleCtrl.AddRoleData)
-		role.GET("/:roleID", init.RoleCtrl.GetRoleById)
-		role.PUT("/:roleID", init.RoleCtrl.UpdateRole)
-		role.DELETE("/:roleID", init.RoleCtrl.DeleteRole)
+		role.GET("", init.RoleModule.Ctrl.GetAllRole)
+		role.POST("", init.RoleModule.Ctrl.AddRoleData)
+		role.GET("/:roleID", init.RoleModule.Ctrl.GetRoleById)
+		role.PUT("/:roleID", init.RoleModule.Ctrl.UpdateRole)
+		role.DELETE("/:roleID", init.RoleModule.Ctrl.DeleteRole)
 
 		auth := api.Group("/auth")
-		auth.POST("/signup", init.UserCtrl.AddUserData)
-		auth.POST("/login", init.AuthCtrl.Login)
+		auth.POST("/signup", init.UserModule.Ctrl.AddUserData)
+		auth.POST("/login", init.AuthModule.Ctrl.Login)
 	}
 
 	return router
